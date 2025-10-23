@@ -134,9 +134,10 @@ export default function EditorialDetail() {
             </Text>
 
             <View className="flex-row justify-between mb-6">
-              <Text className="text-xs font-outfit-bold text-red-500">
-                📰 {data.paperName}
+              <Text className="text-[11px] font-outfit-bold text-red-600 bg-red-100/60 border border-red-300 rounded-full px-3 py-[2px] self-start">
+                {data.paperName}
               </Text>
+
               <Text className="text-xs font-outfit-bold text-gray-500">
                 <Ionicons name="person-sharp" size={10} color="#000000ff" />{" "}
                 {data.author}
@@ -204,7 +205,7 @@ export default function EditorialDetail() {
           <View className="bg-white px-6 py-4 rounded-2xl shadow-lg items-center">
             <ActivityIndicator size="large" color="#2563EB" />
             <Text className="mt-3 text-gray-700 font-outfit-medium text-center">
-              Generating UPSC-style questions...
+              Searching Previous year UPSC-style questions...
             </Text>
           </View>
         </View>
