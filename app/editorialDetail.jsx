@@ -134,7 +134,7 @@ export default function EditorialDetail() {
             </Text>
 
             <View className="flex-row justify-between mb-6">
-              <Text className="text-[11px] font-outfit-bold text-red-600 bg-red-100/60 border border-red-300 rounded-full px-3 py-[2px] self-start">
+              <Text numberOfLines={1} ellipsizeMode="tail" className="text-[11px] font-outfit-bold text-red-600 bg-red-100/60 border border-red-300 rounded-full px-3 py-[2px] self-start truncate">
                 {data.paperName}
               </Text>
 
@@ -142,10 +142,10 @@ export default function EditorialDetail() {
                 <Ionicons name="person-sharp" size={10} color="#000000ff" />{" "}
                 {data.author}
               </Text>
-              <Text className="text-xs font-outfit-bold text-gray-500">
+              {/* <Text className="text-xs font-outfit-bold text-gray-500">
                 <Ionicons name="calendar-clear" size={10} color="#000000ff" />{" "}
                 {new Date(data.editorialDate).toLocaleDateString()}
-              </Text>
+              </Text> */}
             </View>
 
             {/* 🧾 Article Content */}
