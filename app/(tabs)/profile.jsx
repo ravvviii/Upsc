@@ -54,7 +54,7 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView className="flex-1 bg-surface-1 p-6">
       {/* Header */}
-      <Text className="text-3xl font-bold text-primary-600 mb-8">My Profile ✨ (OTAA Test)</Text>
+      <Text className="text-3xl font-bold text-primary-600 mb-8">My Profile</Text>
 
       {/* Avatar + name + email */}
       <View className="items-center mb-8">
