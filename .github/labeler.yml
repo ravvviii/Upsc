@@ -1,0 +1,33 @@
+# Configuration for automatic labeling of PRs
+
+"🐛 bug":
+  - "**/*bug*"
+  - "**/*fix*"
+
+"✨ feature":
+  - "app/**/*"
+  - "components/**/*"
+  - "hooks/**/*"
+
+"📱 UI/UX":
+  - "**/*.css"
+  - "**/tailwind*"
+  - "components/**/*"
+
+"🔧 config":
+  - "*.json"
+  - "*.yml"
+  - "*.yaml"
+  - "*.config.*"
+
+"📚 documentation":
+  - "README*"
+  - "**/*.md"
+
+"🚀 deployment":
+  - ".github/**/*"
+  - "eas.json"
+
+"🧪 testing":
+  - "**/*test*"
+  - "**/*spec*"

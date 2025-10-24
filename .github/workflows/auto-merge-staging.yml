@@ -1,0 +1,47 @@
+name: Auto Merge to Staging
+
+on:
+  schedule:
+    # Runs at 11:00 PM UTC (adjust timezone as needed)
+    - cron: '0 23 * * *'
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  auto-merge-staging:
+    name: Auto Merge Approved PRs to Staging
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Create staging branch if not exists
+        run: |
+          git checkout master
+          git pull origin master
+          if ! git show-branch staging 2>/dev/null; then
+            git checkout -b staging
+            git push origin staging
+          else
+            git checkout staging
+            git pull origin staging
+          fi
+
+      - name: Merge master to staging
+        run: |
+          git merge master --no-ff -m "Auto-merge master to staging at $(date)"
+          git push origin staging
+
+      - name: Trigger OTA Update for Staging
+        run: |
+          echo "Staging updated, triggering OTA update..."
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}

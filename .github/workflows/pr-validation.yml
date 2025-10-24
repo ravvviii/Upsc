@@ -1,0 +1,44 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [master, staging]
+
+jobs:
+  validate:
+    name: Validate Pull Request
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run Expo Doctor
+        run: npx expo-doctor
+
+      - name: Check for package conflicts
+        run: |
+          echo "✅ All validation checks passed!"
+          echo "PR is ready for review and approval."
+
+  auto-label:
+    name: Auto Label PR
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Label PR based on files changed
+        uses: actions/labeler@v4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}

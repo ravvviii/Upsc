@@ -2,7 +2,7 @@ name: OTA Update
 
 on:
   push:
-    branches: [main, master]
+    branches: [master, staging]
 
 jobs:
   update:
@@ -29,7 +29,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Create update
-        run: eas update --auto --non-interactive
+      - name: Determine branch and create update
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
+            echo "Deploying to production channel"
+            eas update --branch production --message "Production update from master"
+          elif [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
+            echo "Deploying to staging channel"
+            eas update --branch staging --message "Staging update"
+          else
+            echo "Deploying to development channel"
+            eas update --branch development --message "Development update"
+          fi
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}

@@ -1,0 +1,52 @@
+name: Auto Merge Staging to Master
+
+on:
+  schedule:
+    # Runs at 6:00 PM UTC (adjust timezone as needed)
+    - cron: '0 18 * * *'
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  auto-merge-master:
+    name: Auto Merge Staging to Master
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Merge staging to master
+        run: |
+          git checkout master
+          git pull origin master
+          git checkout staging
+          git pull origin staging
+          git checkout master
+          git merge staging --no-ff -m "Auto-merge staging to master at $(date)"
+          git push origin master
+
+      - name: Create Release Tag
+        run: |
+          DATE=$(date +%Y%m%d-%H%M%S)
+          git tag -a "release-$DATE" -m "Automated release at $(date)"
+          git push origin --tags
+
+      - name: Trigger Production OTA Update
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Deploy to Production
+        run: eas update --branch production --message "Auto-deployment from staging"
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
