@@ -6,6 +6,7 @@ This project is intentionally configured to use only **JavaScript / JSX** (no Ty
 - `tsconfig.json` was removed.
 - A `jsconfig.json` was added with `checkJs: false` to silence TypeScript diagnostics.
 - Dev dependencies for TypeScript types were removed.
+- **OTA Updates**: Configured with Expo Updates for automatic deployment.
 
 If you see lingering red squiggles referencing `.d.ts` files, clear Metro + editor cache:
 
