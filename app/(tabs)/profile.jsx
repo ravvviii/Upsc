@@ -12,6 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useAuthContext } from "../../context/AuthContext";
 import { Link } from "expo-router";
+import { checkForUpdatesManually } from "../../lib/updates";
 
 export default function ProfileScreen() {
   const { user, logout } = useAuthContext();
@@ -145,6 +146,20 @@ export default function ProfileScreen() {
           <Text className="text-white font-semibold text-base">Logout</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Check for Updates Button */}
+      <TouchableOpacity
+        onPress={checkForUpdatesManually}
+        className="bg-primary-500 rounded-xl py-3 px-4 mb-4 flex-row items-center justify-center"
+      >
+        <Ionicons
+          name="refresh-outline"
+          size={20}
+          color="#fff"
+          className="mr-2"
+        />
+        <Text className="text-white font-semibold text-base">Check for Updates</Text>
+      </TouchableOpacity>
 
       {/* Footer Text */}
       <View className=" items-center mt-auto mb-4">

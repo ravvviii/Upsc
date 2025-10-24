@@ -7,6 +7,7 @@ import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import { View, ActivityIndicator } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { checkForUpdates } from "../lib/updates";
 
 // keep splash visible until we hide it manually
 SplashScreen.preventAutoHideAsync();
@@ -27,6 +28,9 @@ export default function RootLayout() {
 
         // ⏳ Small delay (optional) to make transition smooth
         await new Promise((resolve) => setTimeout(resolve, 200));
+        
+        // 🔄 Check for OTA updates
+        await checkForUpdates();
       } catch (e) {
         console.warn("Font loading error:", e);
       } finally {
