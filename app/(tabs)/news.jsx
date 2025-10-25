@@ -12,13 +12,13 @@ import { api } from "../../lib/api";
 import { useRouter } from "expo-router";
 import { useFocusEffect } from "@react-navigation/native";
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen() {
   const { user } = useAuthContext();
 
   const [articles, setArticles] = useState([]);
   const [bookmarkedIds, setBookmarkedIds] = useState(new Set());
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // ⬅ start true to show loader immediately
   const [loadingMore, setLoadingMore] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -27,7 +27,7 @@ export default function HomeScreen({ navigation }) {
   // 🔹 Fetch bookmarks
   const fetchBookmarks = useCallback(async () => {
     try {
-      const res = await api.bookmarks(); // { bookmarks: [...] }
+      const res = await api.bookmarks();
       const list = res.bookmarks || [];
       const ids = new Set(list.map((b) => b._id));
       setBookmarkedIds(ids);
@@ -51,14 +51,13 @@ export default function HomeScreen({ navigation }) {
       } else {
         setArticles((prev) => {
           const combined = [...prev, ...newArticles];
-          // Remove duplicates by _id
           const unique = combined
             .filter(
               (a, index, self) =>
                 index === self.findIndex((b) => b._id === a._id)
             )
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // newest first
-            return unique;
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          return unique;
         });
       }
 
@@ -72,10 +71,11 @@ export default function HomeScreen({ navigation }) {
     }
   }, []);
 
+  // 🔹 Run when screen focused
   useFocusEffect(
     useCallback(() => {
       fetchBookmarks();
-      fetchArticles(1, true); // refresh every time user comes back
+      fetchArticles(1, true);
     }, [fetchBookmarks, fetchArticles])
   );
 
@@ -110,7 +110,8 @@ export default function HomeScreen({ navigation }) {
     });
   };
 
-  if (loading && page === 1 && !refreshing) {
+  // 🌀 Show loader first (always before showing content)
+  if (loading) {
     return (
       <View className="flex-1 items-center justify-center bg-surface-0">
         <ActivityIndicator size="large" color="#2563EB" />
@@ -118,17 +119,10 @@ export default function HomeScreen({ navigation }) {
     );
   }
 
-return (
-  <View className="flex-1 bg-surface-0 p-6">
-    <Text className="text-xl font-bold text-accent mb-2">
-      Hello {user?.username}
-    </Text>
-    <Text className="text-light-300 mb-4">
-      Your dashboard will show recent articles, progress and quick links.
-    </Text>
-
-    {articles.length === 0 && !loading ? (
-      <View className="flex-1 justify-center items-center mt-10">
+  // 📰 If loaded but no articles
+  if (!loading && articles.length === 0) {
+    return (
+      <View className="flex-1 justify-center items-center bg-surface-0 p-6">
         <Text className="text-lg font-semibold text-gray-700 mb-2">
           📰 We’re uploading fresh content soon!
         </Text>
@@ -136,7 +130,19 @@ return (
           Check back in a little while — new UPSC articles and editorials are on their way.
         </Text>
       </View>
-    ) : (
+    );
+  }
+
+  // ✅ If we have data
+  return (
+    <View className="flex-1 bg-surface-0 p-6">
+      <Text className="text-xl font-bold text-accent mb-2">
+        Hello {user?.username}
+      </Text>
+      <Text className="text-light-300 mb-4">
+        Your dashboard will show recent articles, progress and quick links.
+      </Text>
+
       <FlatList
         data={articles}
         keyExtractor={(item) => item._id}
@@ -160,8 +166,6 @@ return (
           />
         }
       />
-    )}
-  </View>
-);
-
+    </View>
+  );
 }
