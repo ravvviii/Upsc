@@ -147,19 +147,7 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Check for Updates Button */}
-      <TouchableOpacity
-        onPress={checkForUpdatesManually}
-        className="bg-primary-500 rounded-xl py-3 px-4 mb-4 flex-row items-center justify-center"
-      >
-        <Ionicons
-          name="refresh-outline"
-          size={20}
-          color="#fff"
-          className="mr-2"
-        />
-        <Text className="text-white font-semibold text-base">Check for Updates</Text>
-      </TouchableOpacity>
+
 
       {/* Footer Text */}
       <View className=" items-center mt-auto mb-4">

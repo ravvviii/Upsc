@@ -100,23 +100,14 @@ export default function EditorialDetail() {
   };
 
   // 🕓 Loader while editorial info loads
-  if (!data)
-    return (
-      <View className="flex-1 justify-center items-center bg-gray-50">
-        <ActivityIndicator size="large" color="#4f46e5" />
-      </View>
-    );
+if (!data || checkingAttempt) {
+  return (
+    <View className="flex-1 justify-center items-center bg-gray-50">
+      <ActivityIndicator size="large" color="#eb2525ff" />
+    </View>
+  );
+}
 
-  // 🕓 Loader while checking attempt
-  if (checkingAttempt)
-    return (
-      <View className="flex-1 justify-center items-center bg-gray-50">
-        <ActivityIndicator size="large" color="#2563EB" />
-        <Text className="mt-3 text-gray-600 font-outfit-medium">
-          Checking your quiz status...
-        </Text>
-      </View>
-    );
 
   // 🧾 UI Rendering
   return (
